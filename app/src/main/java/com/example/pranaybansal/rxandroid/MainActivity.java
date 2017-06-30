@@ -9,11 +9,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
@@ -107,6 +110,49 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+/////////////////////////////////////////////////////////////////////////
+        /**
+         * Create operator
+         */
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<String> e) throws Exception {
+                e.onNext("Fuck You!!");
+            }
+        }).subscribe(new Observer<String>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@NonNull String s) {
+                Log.d(TAG, "onNext: "+s);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+        /////////////////////////////////////////////////////////////////////////
+        /**
+        * Consumer operator
+        */
+        Observable.just("You TOO").subscribe(new Consumer<String>() {
+            @Override
+            public void accept(@NonNull String s) throws Exception {
+                Log.d(TAG, "accept: "+s);
+            }
+        });
+
+
         ///////////////////////////////////////////////////////
         /**
          * Service hit example using rxjava and retrofit
