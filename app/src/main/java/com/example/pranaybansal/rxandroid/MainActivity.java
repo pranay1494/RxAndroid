@@ -27,6 +27,7 @@ import retrofit2.Response;
 /**
  * https://www.youtube.com/watch?v=vfjgQabgjOg
  * tutplus tutorials
+ * http://www.grokkingandroid.com/rxjavas-side-effect-methods/
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -111,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
 /////////////////////////////////////////////////////////////////////////
         /**
          * Create operator
@@ -181,6 +183,35 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        ////////////////////////////////////////////////////////////////////
+        /**
+         * doonNext - side effect method
+         * Side effect methods do not affect your stream in itself. Instead they are invoked when certain events occur to allow you to react to those events.
+         */
+        Observable.fromArray(new Integer[]{2, 3, 5, 7, 11})
+                .doOnNext(new Consumer<Integer>() {
+                    @Override
+                    public void accept(@NonNull Integer integer) throws Exception {
+                        Log.d(TAG, "accept: doOnnext1"+integer);
+                    }
+                }).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(@NonNull Integer integer) throws Exception {
+                return integer.intValue()%2 ==0;
+            }
+        }).doOnNext(new Consumer<Integer>() {
+            @Override
+            public void accept(@NonNull Integer integer) throws Exception {
+                Log.d(TAG, "accept: doOnnext2"+integer);
+            }
+        }).count().subscribe(new Consumer<Long>() {
+            @Override
+            public void accept(@NonNull Long aLong) throws Exception {
+                Log.d(TAG, "answer: "+aLong);
+            }
+        });
+
 
     }
 
