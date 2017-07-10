@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -211,8 +212,27 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "answer: "+aLong);
             }
         });
+////////////////////////////////////////////////////////////////
+        /**
+         * flatmap
+         * returns an observable
+         *
+         * toList()coverts diifferent observables into sngle list of objects
+         */
 
-
+        Observable.fromArray(new String[]{"a","b","c"})
+                .flatMap(new Function<String, ObservableSource<?>>() {
+                    @Override
+                    public ObservableSource<?> apply(@NonNull String s) throws Exception {
+                        return Observable.just(s+"x");
+                    }
+                })
+                .doOnNext(new Consumer<Object>() {
+            @Override
+            public void accept(@NonNull Object o) throws Exception {
+                Log.d(TAG, "flatmap: "+(String)o);
+            }
+        }).toList().subscribe();
     }
 
 
